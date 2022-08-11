@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block content %}
+    {% for file in files %}
+            <div class="col-md-4">
+                <h4> Title: {{ file.id }} </h4>
+                <p> Authors: {{ file.filename }} </p>
+            </div>
+        {% endfor %}
+{% endblock %}

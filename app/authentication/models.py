@@ -3,6 +3,12 @@ from datetime import datetime
 from flask_login import UserMixin
 
 from app import db, bcrypt
+from app import login_manager
+
+
+@login_manager.user_loader
+def load_user(id):
+    return User.query.get(int(id))
 
 
 class User(UserMixin, db.Model):
@@ -13,6 +19,7 @@ class User(UserMixin, db.Model):
     user_email = db.Column(db.String(60), unique=True, index=True)
     user_password = db.Column(db.String(80))
     registration_date = db.Column(db.DateTime, default=datetime.now)
+    files = db.relationship('File', backref='author', lazy='dynamic')
 
     def check_password(self, password) -> bool:
         return bcrypt.check_password_hash(self.user_password, password)
@@ -28,5 +35,6 @@ class User(UserMixin, db.Model):
         db.session.add(user)
         db.session.commit()
         return user
+
 
 
